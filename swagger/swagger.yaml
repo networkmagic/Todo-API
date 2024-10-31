@@ -1,0 +1,301 @@
+openapi: 3.0.3
+info:
+  title: Todo API
+  description: A simple Todo API with user and group management
+  version: 1.0.0
+
+servers:
+  - url: /api
+    description: API base URL
+
+paths:
+  /todo:
+    post:
+      summary: Create a new todo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+                - group_id
+                - todo_text
+                - expire_at
+              properties:
+                user_id:
+                  type: integer
+                group_id:
+                  type: integer
+                todo_text:
+                  type: string
+                expire_at:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: Todo created successfully
+        '400':
+          description: Invalid input
+  
+  /group:
+    post:
+      summary: Create a new group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - user_id
+                - group_name
+                - description
+              properties:
+                user_id:
+                  type: integer
+                group_name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '201':
+          description: Group created successfully
+        '400':
+          description: Invalid input
+
+  /user:
+    post:
+      summary: Create a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+                - email
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                  format: password
+                email:
+                  type: string
+                  format: email
+      responses:
+        '201':
+          description: User created successfully
+        '400':
+          description: Invalid input
+    get:
+      summary: Get all users
+      responses:
+        '200':
+          description: List of users retrieved successfully
+
+  /todo/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Todo ID
+    get:
+      summary: Get a todo by ID
+      responses:
+        '200':
+          description: Todo retrieved successfully
+        '404':
+          description: Todo not found
+    put:
+      summary: Update a todo
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                todo_text:
+                  type: string
+                expire_at:
+                  type: string
+                  format: date-time
+      responses:
+        '200':
+          description: Todo updated successfully
+        '404':
+          description: Todo not found
+        '400':
+          description: Invalid input
+    delete:
+      summary: Delete a todo
+      responses:
+        '204':
+          description: Todo deleted successfully
+        '404':
+          description: Todo not found
+
+  /user/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: User ID
+    get:
+      summary: Get a user by ID
+      responses:
+        '200':
+          description: User retrieved successfully
+        '404':
+          description: User not found
+    put:
+      summary: Update a user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                password:
+                  type: string
+                  format: password
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: User updated successfully
+        '404':
+          description: User not found
+        '400':
+          description: Invalid input
+    delete:
+      summary: Delete a user
+      responses:
+        '204':
+          description: User deleted successfully
+        '404':
+          description: User not found
+
+  /group/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: Group ID
+    get:
+      summary: Get a group by ID
+      responses:
+        '200':
+          description: Group retrieved successfully
+        '404':
+          description: Group not found
+    put:
+      summary: Update a group
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                group_name:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Group updated successfully
+        '404':
+          description: Group not found
+        '400':
+          description: Invalid input
+    delete:
+      summary: Delete a group
+      responses:
+        '204':
+          description: Group deleted successfully
+        '404':
+          description: Group not found
+
+  /todo/list:
+    get:
+      summary: Get all todos
+      responses:
+        '200':
+          description: List of todos retrieved successfully
+
+  /group/list:
+    get:
+      summary: Get all groups
+      responses:
+        '200':
+          description: List of groups retrieved successfully
+
+components:
+  schemas:
+    Todo:
+      type: object
+      properties:
+        id:
+          type: integer
+        user_id:
+          type: integer
+        group_id:
+          type: integer
+        todo_text:
+          type: string
+        expire_at:
+          type: string
+          format: date-time
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Group:
+      type: object
+      properties:
+        id:
+          type: integer
+        group_name:
+          type: string
+        description:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
